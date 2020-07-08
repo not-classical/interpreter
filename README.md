@@ -1,2 +1,2 @@
 # interpreter
-A QASM interpreter
+A QUIL interpreter
