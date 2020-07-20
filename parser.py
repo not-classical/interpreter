@@ -5,7 +5,7 @@ from typing import List
 
 from tokenize import Token
 from qubit import Qubit
-from gates import QuantumGate, Hadamard
+from gates import QuantumGate, CNOT, Hadamard
 
 
 class Parser:
@@ -67,16 +67,23 @@ class Parser:
          - Hadamard
         """
         self.eat()
-        CNOT, HADAMARD, IDENTITY, MEASURE = ["CNOT", "H", "I", "MEASURE"]
+        cnot, hadamard, identity, measure = ["CNOT", "H", "I", "MEASURE"]
         token: Token = self.current_token
 
         if self.current_token.token_type is not Token.GATE:
             raise TypeError(f"Unexpected token {token.value}")
 
-        if token.value == HADAMARD:
+        if token.value == hadamard:
             self.parse_none()
             qubit: Qubit = self.parse_qubit()
             return Hadamard(qubit)
+
+        if token.value == cnot:
+            self.parse_none()
+            qubit1: Qubit = self.parse_qubit()
+            self.parse_none()
+            qubit2: Qubit = self.parse_qubit()
+            return CNOT(qubit1, qubit2)
 
         else:
             raise TypeError("Unsupported gate")
@@ -84,6 +91,6 @@ class Parser:
 
 import tokenize
 
-ans = tokenize.LexicalAnalyzer("H 0 # dfadsk;jf;ladksjf;lak j")
+ans = tokenize.LexicalAnalyzer("CNOT 0 1 # I am a comment! ")
 ans2 = ans.lex()
 parser = Parser(ans2)
