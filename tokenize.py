@@ -6,7 +6,7 @@ We can add more as we go on
 import sys
 import re
 
-from typing import Union
+from typing import List, Optional, Pattern, Tuple, Union
 
 
 class Token:
@@ -27,7 +27,7 @@ class Token:
         "GATE",
     ]
 
-    def __init__(self, token_type: str, value: Union[str, int]):
+    def __init__(self, token_type: Optional[str], value: Union[str, int]):
         """
         For now just gates and qubits
         """
@@ -43,7 +43,7 @@ class LexicalAnalyzer:
     Lexes input to `Token` types
     """
 
-    token_expressions = [
+    token_expressions: List[Tuple[str, Optional[str]]] = [
         (r"[ \n\t]+", None),  # Spaces
         (r"#[^\n]*", None),  # Regex for comments
         (r";", Token.SEMICOLON),
@@ -61,7 +61,7 @@ class LexicalAnalyzer:
     def __init__(self, text: str):
         self.text = text
 
-    def lex(self) -> [Token]:
+    def lex(self) -> List[Token]:
         """
         Returns an array of tokens
 
@@ -72,12 +72,15 @@ class LexicalAnalyzer:
         while pos < len(self.text):
             match = None
             for token_expression in self.token_expressions:
+                pattern: str
+                type_value: Optional[str]
                 pattern, type_value = token_expression
+
                 regex = re.compile(pattern)
                 match = regex.match(self.text, pos)
 
                 if match:
-                    token_value = match.group(0)
+                    token_value: str = match.group(0)
                     if token_value:
                         token = Token(type_value, token_value)
                         out.append(token)
