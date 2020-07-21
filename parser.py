@@ -65,6 +65,7 @@ class Parser:
         """
         Parses a gate. Currently we have:
          - Hadamard
+         - CNOT
         """
         self.eat()
         cnot, hadamard, identity, measure = ["CNOT", "H", "I", "MEASURE"]
