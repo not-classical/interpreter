@@ -16,3 +16,8 @@ You may use the following gates:
  * `Z` 
  * `I` 
  * `CNOT` 
+
+Additionally we have provided some test for testing, in the quil_tests folder. Run the scripts like so
+```bash
+cat quil_tests/superdense_coding.quil | python evaluator.py
+```
