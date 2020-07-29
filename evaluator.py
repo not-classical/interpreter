@@ -3,6 +3,17 @@ from parser import Parser
 from product_system import ProductSystem
 
 
+def print_proba(vector_prob: list):
+    """
+    Input is like [(01, 0.5555)]
+    Print the probabities like this
+    |00>    100%
+    |01>      0%
+    """
+    for vec, prob in vector_prob:
+        print(f"|{vec}>\t{prob}%")
+
+
 def main():
     print(
         """
@@ -21,7 +32,7 @@ def main():
     system = ProductSystem(2)
     while True:
         try:
-            text = input("(quil)> ")
+            text = input()
         except EOFError:
             break
         if not text:
@@ -37,12 +48,14 @@ def main():
             else:
                 system.singleGate(parsed_object.name, parsed_object.qubit.number)
 
-    print("\n Result: \n ")
+    print_proba(system.get_probabilities())
+
+    print("\n Result after collapse: \n ")
     res = ""
     for i in system.collapse():
         res += str(i)
 
-    print(f"|{res}>            100%")
+    print(f"|{res}>\t100%")
 
 
 if __name__ == "__main__":

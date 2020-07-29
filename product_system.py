@@ -101,6 +101,32 @@ class ProductSystem:
             else:
                 self.state[i] = 0
 
+    def _vector_comb(self, number: int, ans=None):
+        """
+        Return the combinations of the vectors for example:
+        00 01 10 11
+        """
+        new_ans = []
+        if number == 0:
+            return ans
+        if ans is None:
+            new_ans.append("1")
+            new_ans.append("0")
+        else:
+            for i in ans:
+                new_ans.append(i + "1")
+                new_ans.append(i + "0")
+
+        return self._vector_comb(number - 1, new_ans)
+
+    def get_probabilities(self):
+        """
+        Return probability vector
+        """
+        probabilities = abs(self.state ** 2)
+        vectors = self._vector_comb(self.qubits)
+        return list(zip(reversed(vectors), probabilities))
+
     def collapse(self):
         probabilities = abs(self.state ** 2)
         m = max(probabilities)
