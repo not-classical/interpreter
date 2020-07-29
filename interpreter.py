@@ -11,7 +11,7 @@ def print_proba(vector_prob: list):
     |01>      0%
     """
     for vec, prob in vector_prob:
-        print(f"|{vec}>\t{prob}%")
+        print(f"|{vec}>\tP = {prob * 100}%")
 
 
 def main():
@@ -55,7 +55,7 @@ def main():
     for i in system.collapse():
         res += str(i)
 
-    print(f"|{res}>\t100%")
+    print(f"|{res[::-1]}>\t100%")
 
 
 if __name__ == "__main__":

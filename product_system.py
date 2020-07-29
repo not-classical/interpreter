@@ -25,6 +25,9 @@ class ProductSystem:
         self.qubits += 1
 
     def singleGate(self, gate, target):
+        if target > self.qubits - 1:
+            for _ in range(target - self.qubits + 1):
+                self.add()
         gateMatrix = np.array([1])
         for i in range(self.qubits):
             if i == target:
@@ -35,6 +38,15 @@ class ProductSystem:
         self.state = np.matmul(gateMatrix, self.state)
 
     def multiGate(self, gate, control, target):
+
+        if target > self.qubits - 1:
+            for _ in range(target - self.qubits + 1):
+                self.add()
+
+        if control > self.qubits - 1:
+            for _ in range(control - self.qubits + 1):
+                self.add()
+
         swapMatrix = np.identity(2 ** self.qubits)
         reverseMatrix = np.identity(2 ** self.qubits)
 
@@ -110,12 +122,12 @@ class ProductSystem:
         if number == 0:
             return ans
         if ans is None:
-            new_ans.append("1")
             new_ans.append("0")
+            new_ans.append("1")
         else:
             for i in ans:
-                new_ans.append(i + "1")
                 new_ans.append(i + "0")
+                new_ans.append(i + "1")
 
         return self._vector_comb(number - 1, new_ans)
 
@@ -125,7 +137,8 @@ class ProductSystem:
         """
         probabilities = abs(self.state ** 2)
         vectors = self._vector_comb(self.qubits)
-        return list(zip(reversed(vectors), probabilities))
+        vectors = [elem[::-1] for elem in vectors]
+        return list(zip(vectors, probabilities))
 
     def collapse(self):
         probabilities = abs(self.state ** 2)

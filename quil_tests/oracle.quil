@@ -5,10 +5,12 @@ H 0
 H 1
 
 # Enter black box, this is negation
+# Enter black box, this is negation
 CNOT 0 1
 X 1
 # Exit black box
 
+X 1
 H 0
 H 1
 # expected output : |01>
