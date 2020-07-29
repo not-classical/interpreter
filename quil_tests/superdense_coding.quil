@@ -1,0 +1,8 @@
+H 0
+CNOT 0 1
+
+# Message is 0 1
+I 0
+
+CNOT 0 1
+H 0

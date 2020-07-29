@@ -5,7 +5,7 @@ from typing import List
 
 from tokenize import Token
 from qubit import Qubit
-from gates import QuantumGate, CNOT, Hadamard
+from gates import *
 
 
 class Parser:
@@ -63,21 +63,22 @@ class Parser:
 
     def parse_gate(self) -> QuantumGate:
         """
-        Parses a gate. Currently we have:
-         - Hadamard
-         - CNOT
+        Parses a gate
         """
         self.eat()
-        cnot, hadamard, identity, measure = ["CNOT", "H", "I", "MEASURE"]
+        cnot, hadamard, identity, measure, paulix, pauliy, pauliz = [
+            "CNOT",
+            "H",
+            "I",
+            "MEASURE",
+            "X",
+            "Y",
+            "Z",
+        ]
         token: Token = self.current_token
 
         if self.current_token.token_type is not Token.GATE:
             raise TypeError(f"Unexpected token {token.value}")
-
-        if token.value == hadamard:
-            self.parse_none()
-            qubit: Qubit = self.parse_qubit()
-            return Hadamard(qubit)
 
         if token.value == cnot:
             self.parse_none()
@@ -87,7 +88,21 @@ class Parser:
             return CNOT(qubit1, qubit2)
 
         else:
-            raise TypeError("Unsupported gate")
+            self.parse_none()
+            qubit: Qubit = self.parse_qubit()
+
+            if token.value == identity:
+                return Identity(qubit)
+            elif token.value == paulix:
+                return PauliX(qubit)
+            elif token.value == pauliz:
+                return PauliZ(qubit)
+            elif token.value == pauliy:
+                return PauliY(qubit)
+            elif token.value == hadamard:
+                return Hadamard(qubit)
+
+        raise TypeError("Unsupported gate")
 
 
 import tokenize

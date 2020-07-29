@@ -55,6 +55,8 @@ class LexicalAnalyzer:
         (r"X", Token.GATE),
         (r"H", Token.GATE),
         (r"I", Token.GATE),
+        (r"Y", Token.GATE),
+        (r"Z", Token.GATE),
         (r"[0-9]+", Token.DIGIT),
     ]
 
