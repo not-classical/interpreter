@@ -101,6 +101,8 @@ class Parser:
                 return PauliY(qubit)
             elif token.value == hadamard:
                 return Hadamard(qubit)
+            elif token.value == measure:
+                return Measure(qubit)
 
         raise TypeError("Unsupported gate")
 

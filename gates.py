@@ -28,6 +28,14 @@ class Hadamard(QuantumGate):
     def __repr__(self):
         return f"<Hadamard with {self.qubit}>"
 
+class Measure(QuantumGate):
+    name = "MEASURE"
+
+    def __init__(self, qubit: Qubit):
+        self.qubit = qubit
+
+    def __repr__(self):
+        return f"<MEASURE with qubit {self.qubit}>"
 
 class PauliZ(QuantumGate):
     name = "Z"

@@ -45,6 +45,8 @@ def main():
                 system.multiGate(
                     "CNOT", parsed_object.qubit1.number, parsed_object.qubit2.number
                 )
+            elif parsed_object.name == "MEASURE":
+                system.measure(parsed_object.qubit.number)
             else:
                 system.singleGate(parsed_object.name, parsed_object.qubit.number)
 

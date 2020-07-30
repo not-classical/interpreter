@@ -46,7 +46,7 @@ class LexicalAnalyzer:
     token_expressions: List[Tuple[str, Optional[str]]] = [
         (r"[ \n\t]+", None),  # Spaces
         (r"#[^\n]*", None),  # Regex for comments
-        (r";", Token.SEMICOLON),
+        (r";", None),
         (r"DEFGATE", Token.INSTRUCTION),
         (r"DEFCIRCUIT", Token.INSTRUCTION),
         (r"MEASURE", Token.GATE),
