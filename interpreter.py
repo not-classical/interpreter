@@ -10,8 +10,8 @@ def print_proba(vector_prob: list):
     |00>    100%
     |01>      0%
     """
-    for vec, prob in vector_prob:
-        print(f"|{vec}>\tP = {prob * 100}%")
+    for vec, prob in sorted(vector_prob):
+        print(f"|{vec}>\tP = {round(prob * 100, 6)}%")
 
 
 def main():
