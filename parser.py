@@ -1,10 +1,10 @@
 """
 Parser module - parses array of tokens and returns an AST or error
 """
-from typing import List
-
+from typing import List, Optional
 from tokenize import Token
 from qubit import Qubit
+from program import *
 from gates import *
 
 
@@ -42,6 +42,13 @@ class Parser:
                 self.parse_none()
             elif curr_type == Token.GATE:
                 elements.append(self.parse_gate())
+            elif curr_type == Token.INSTRUCTION:
+                elements.append(self.parse_instruction())
+            elif curr_type == Token.VARIABLE:
+                elements.append(self.parse_variable())
+            elif curr_type == Token.TYPE:
+                # Currently only implement int
+                self.pos += 1
 
         return elements
 
@@ -102,9 +109,115 @@ class Parser:
             elif token.value == hadamard:
                 return Hadamard(qubit)
             elif token.value == measure:
-                return Measure(qubit)
+                self.parse_none()
+                var: Variable = self.parse_variable()
+                return Measure(qubit, var)
 
         raise TypeError("Unsupported gate")
+
+    def parse_instruction(self):
+        """
+        Parses an instruction
+        """
+        self.eat()
+        token: Token = self.current_token
+
+        if token.token_type is not Token.INSTRUCTION:
+            raise TypeError(f"Unexpected token {token.value}")
+
+        self.parse_none()
+
+        if token.value == "DECLARE":
+            return self.parse_declare()
+        elif token.value == "LABEL":
+            return self.parse_label()
+        elif token.value == "JUMP-WHEN":
+            return self.parse_jump(1)
+        elif token.value == "JUMP-UNLESS":
+            return self.parse_jump(0)
+
+        raise TypeError("Unsupported instruction")
+
+    def parse_declare(self) -> Variable:
+        """
+        Parses a variable declaration
+
+        Currently only implements variables of type int
+        """
+        var: Variable = self.parse_variable()
+
+        t = self.parse_type()
+        index = self.parse_index()
+        var.index = index
+
+        return var
+
+    def parse_variable(self) -> Variable:
+        """
+        Parses a variable
+        """
+        self.eat()
+        token: Token = self.current_token
+
+        if token.token_type is not Token.VARIABLE:
+            raise TypeError(f"Unexpected token {token.value}")
+
+        name: str = token.value
+        size: Optional[int] = self.parse_index()
+
+        return Variable(name, size)
+
+    def parse_index(self) -> Optional[int]:
+        """
+        Parses the size/index of a variable
+        """
+        if self.pos >= len(self.tokens):
+            return None
+
+        self.eat()
+        token: Token = self.current_token
+
+        if token.token_type is Token.INDEX:
+            return int(token.value[1 : len(token.value) - 1])
+        elif token.token_type is None:
+            return None
+
+        raise TypeError(f"Unexpected token {token.value}, {token.token_type}")
+
+    def parse_type(self):
+        """
+        Parses the type
+        """
+        self.eat()
+        token: Token = self.current_token
+
+        if token.token_type is not Token.TYPE:
+            raise TypeError(f"Unexpected token {token.value}")
+
+        # Not yet implemented, currently only allows int
+        return None
+
+    def parse_label(self) -> Label:
+        """
+        Parses a label
+        """
+        self.eat()
+        token: Token = self.current_token
+
+        if token.token_type is not Token.LABEL:
+            raise TypeError(f"Unexpected token {token.value}")
+
+        return Label(token.value)
+
+    def parse_jump(self, condition: int) -> Jump:
+        """
+        Parses a jump statement
+        """
+        label: Label = self.parse_label()
+        self.parse_none()
+        var: Variable = self.parse_variable()
+
+        return Jump(label, var, condition)
 
 
 import tokenize

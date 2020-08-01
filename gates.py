@@ -1,5 +1,5 @@
 from qubit import Qubit
-
+from program import Variable
 import numpy as np
 from cmath import sqrt
 import random
@@ -28,14 +28,17 @@ class Hadamard(QuantumGate):
     def __repr__(self):
         return f"<Hadamard with {self.qubit}>"
 
+
 class Measure(QuantumGate):
     name = "MEASURE"
 
-    def __init__(self, qubit: Qubit):
+    def __init__(self, qubit: Qubit, var: Variable):
         self.qubit = qubit
+        self.var = var
 
     def __repr__(self):
         return f"<MEASURE with qubit {self.qubit}>"
+
 
 class PauliZ(QuantumGate):
     name = "Z"

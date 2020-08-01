@@ -17,19 +17,28 @@ class Token:
      - SEMICOLON
      - SPACE
      - HASH (COMMENT)
+     - VARIABLE
+     - LABEL
+     - INSTRUCTION
+     - TYPE
+     - INDEX
     """
 
-    LETTER, DIGIT, SEMICOLON, INSTRUCTION, GATE = [
+    (LETTER, DIGIT, SEMICOLON, INSTRUCTION, GATE, VARIABLE, LABEL, TYPE, INDEX,) = [
         "LETTER",
         "DIGIT",
         "SEMI-COLON",
         "INSTRUCTION",
         "GATE",
+        "VARIABLE",
+        "LABEL",
+        "TYPE",
+        "INDEX",
     ]
 
     def __init__(self, token_type: Optional[str], value: Union[str, int]):
         """
-        For now just gates and qubits
+        For now just gates, qubits, variables, labels, and jumps
         """
         self.token_type = token_type
         self.value = value
@@ -49,6 +58,11 @@ class LexicalAnalyzer:
         (r";", None),
         (r"DEFGATE", Token.INSTRUCTION),
         (r"DEFCIRCUIT", Token.INSTRUCTION),
+        (r"DECLARE", Token.INSTRUCTION),
+        (r"LABEL", Token.INSTRUCTION),
+        (r"JUMP-WHEN", Token.INSTRUCTION),
+        (r"JUMP-UNLESS", Token.INSTRUCTION),
+        (r"BIT|INTEGER", Token.TYPE),
         (r"MEASURE", Token.GATE),
         (r"CNOT", Token.GATE),
         (r"NOP", Token.GATE),
@@ -58,6 +72,9 @@ class LexicalAnalyzer:
         (r"Y", Token.GATE),
         (r"Z", Token.GATE),
         (r"[0-9]+", Token.DIGIT),
+        (r"[a-zA-Z]\w*", Token.VARIABLE),
+        (r"\[\d+\]", Token.INDEX),
+        (r"@\w+", Token.LABEL),
     ]
 
     def __init__(self, text: str):
