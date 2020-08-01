@@ -42,8 +42,49 @@ class Parser:
                 self.parse_none()
             elif curr_type == Token.GATE:
                 elements.append(self.parse_gate())
+            elif curr_type == Token.DECLARATION:
+                elements.append(self.parse_declaration())
 
         return elements
+
+    def parse_identifier(self):
+        """
+        Parse an id after declarations
+        """
+        self.eat()
+        if self.current_token.token_type is not Token.IDENTIFIER:
+            raise TypeError(f"Unexpected token {self.current_token.value}")
+
+        return self.current_token.value
+
+    def parse_classical_type(self) -> List:
+        """
+        Parse a classical type like BIT[2]
+
+        All types will be just integer for now
+        """
+        self.eat()
+        if self.current_token.token_type is not Token.CLASSICAL_TYPE:
+            raise TypeError(f"Unexpected token {self.current_token.value}")
+
+        val = self.current_token.value
+        length = int(val[val.find("[")+1:-1]) # Extract whatever is in the `[]`
+
+        return [None] * length
+
+    def parse_declaration(self) -> None:
+        """
+        Parse declarations like this:
+        DECLARE ro BIT[2]
+        """
+        self.eat()
+        if self.current_token.token_type is not Token.DECLARATION:
+            raise TypeError(f"Unexpected token {self.current_token.value}")
+
+        self.parse_none()
+        name = self.parse_identifier()
+        self.parse_none()
+        data = self.parse_classical_type()
 
     def parse_none(self) -> None:
         self.eat()
@@ -107,8 +148,8 @@ class Parser:
         raise TypeError("Unsupported gate")
 
 
-import tokenize
+# import tokenize
 
-ans = tokenize.LexicalAnalyzer("CNOT 0 1 # I am a comment! ")
-ans2 = ans.lex()
-parser = Parser(ans2)
+# ans = tokenize.LexicalAnalyzer("CNOT 0 1 # I am a comment! ")
+# ans2 = ans.lex()
+# parser = Parser(ans2)

@@ -19,12 +19,15 @@ class Token:
      - HASH (COMMENT)
     """
 
-    LETTER, DIGIT, SEMICOLON, INSTRUCTION, GATE = [
+    LETTER, DIGIT, SEMICOLON, INSTRUCTION, GATE, DECLARATION, IDENTIFIER, CLASSICAL_TYPE = [
         "LETTER",
         "DIGIT",
         "SEMI-COLON",
         "INSTRUCTION",
         "GATE",
+        "DECLARATION",
+        "IDENTIFIER",
+        "CLASSICAL TYPE",
     ]
 
     def __init__(self, token_type: Optional[str], value: Union[str, int]):
@@ -47,6 +50,7 @@ class LexicalAnalyzer:
         (r"[ \n\t]+", None),  # Spaces
         (r"#[^\n]*", None),  # Regex for comments
         (r";", None),
+        (r"DECLARE", Token.DECLARATION),
         (r"DEFGATE", Token.INSTRUCTION),
         (r"DEFCIRCUIT", Token.INSTRUCTION),
         (r"MEASURE", Token.GATE),
@@ -58,6 +62,8 @@ class LexicalAnalyzer:
         (r"Y", Token.GATE),
         (r"Z", Token.GATE),
         (r"[0-9]+", Token.DIGIT),
+        (r"(BIT|INTEGER)(\[[0-9]+\])*", Token.CLASSICAL_TYPE),
+        (r"([a-zA-z]+)([a-zA-z0-9]*)", Token.IDENTIFIER),
     ]
 
     def __init__(self, text: str):

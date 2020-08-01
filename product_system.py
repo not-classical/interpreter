@@ -1,6 +1,7 @@
-import numpy as np
 from cmath import sqrt
 import random
+
+import numpy as np
 
 
 class ProductSystem:
@@ -17,7 +18,7 @@ class ProductSystem:
     def __init__(self, qubits):
         self.state = np.transpose(np.array([1, 0]))  # |0>
         self.qubits = 1
-        for i in range(qubits - 1):
+        for _ in range(qubits - 1):
             self.add()
 
     def add(self):
