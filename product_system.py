@@ -78,7 +78,7 @@ class ProductSystem:
         return gateMatrix
 
     def measure(self, target):
-        probabilities = abs(self.state ** 2)
+        probabilities = abs(self.state) ** 2
         outcomes = []
         m = max(probabilities)
         for i in range(2 ** self.qubits):
@@ -135,13 +135,13 @@ class ProductSystem:
         """
         Return probability vector
         """
-        probabilities = abs(self.state ** 2)
+        probabilities = abs(self.state) ** 2
         vectors = self._vector_comb(self.qubits)
         vectors = [elem[::-1] for elem in vectors]
         return list(zip(vectors, probabilities))
 
     def collapse(self):
-        probabilities = abs(self.state ** 2)
+        probabilities = abs(self.state) ** 2
         m = max(probabilities)
         outcomes = []
         for i in range(2 ** self.qubits):
