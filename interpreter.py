@@ -1,5 +1,5 @@
 import tokenize
-from paarser import Parser
+from parser import Parser
 from product_system import ProductSystem
 from program import *
 
