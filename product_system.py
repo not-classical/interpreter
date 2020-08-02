@@ -163,3 +163,25 @@ class ProductSystem:
                     break
                 value = 1 if value == 0 else 0
         return result
+
+    def print_probabilities(self):
+        """
+        Input is like [(01, 0.5555)]
+        Print the probabities like this
+        |00>    100%
+        |01>      0%
+        """
+        print("System state:")
+        for vec, prob in sorted(self.get_probabilities()):
+            print(f"  |{vec}>\tP = {round(prob * 100, 6)}%")
+
+    def print_result(self):
+        """
+        Prints the result after the system is collapsed
+        """
+        print("\nResult after collapse:")
+        res = ""
+        for i in self.collapse():
+            res += str(i)
+
+        print(f"  |{res[::-1]}>\t100%\n")
