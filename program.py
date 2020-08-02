@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 
 class Label:
@@ -43,6 +43,9 @@ class Program:
         self.instructions = []
         self.variables = {}
         self.labels = {}
+
+    def begin(self):
+        self.program_counter = 0
 
     def instruction(self) -> str:
         """
@@ -114,3 +117,19 @@ class Program:
         Program is complete if program counter is beyond end of instruction list
         """
         return self.program_counter >= len(self.instructions)
+
+    def print_memory(self) -> None:
+        """
+        Prints the contents in classical memory
+        """
+        print("Classical memory:")
+        for var_name in self.variables:
+            var = self.variables[var_name]
+            if isinstance(var, List):
+                print(f"  {var_name}: [", end="")
+                for i in range(len(var) - 1):
+                    print(f"{var[i]}, ", end="")
+                print(f"{var[len(var) - 1]}]")
+            else:
+                print(f"  {var_name}: {var}")
+        print()

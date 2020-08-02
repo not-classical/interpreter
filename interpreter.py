@@ -4,17 +4,6 @@ from product_system import ProductSystem
 from program import *
 
 
-def print_proba(vector_prob: list):
-    """
-    Input is like [(01, 0.5555)]
-    Print the probabities like this
-    |00>    100%
-    |01>      0%
-    """
-    for vec, prob in sorted(vector_prob):
-        print(f"|{vec}>\tP = {round(prob * 100, 6)}%")
-
-
 def main():
     print(
         """
@@ -52,7 +41,7 @@ def main():
             break
 
     # Begin actual execution
-    program.program_counter = 0
+    program.begin()
     while not program.is_complete():
         tokens = tokenize.LexicalAnalyzer(program.instruction()).lex()
         parsed_output = Parser(tokens).parse()
@@ -74,14 +63,9 @@ def main():
             else:
                 system.singleGate(parsed_object.name, parsed_object.qubit.number)
 
-    print_proba(system.get_probabilities())
-
-    print("\n Result after collapse: \n ")
-    res = ""
-    for i in system.collapse():
-        res += str(i)
-
-    print(f"|{res[::-1]}>\t100%")
+    program.print_memory()
+    system.print_probabilities()
+    system.print_result()
 
 
 if __name__ == "__main__":
