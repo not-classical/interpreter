@@ -147,7 +147,7 @@ class Parser:
         var: Variable = self.parse_variable()
 
         t = self.parse_type()
-        index = self.parse_index()
+        index: Optional[int] = self.parse_index()
         var.index = index
 
         return var
@@ -161,6 +161,9 @@ class Parser:
 
         if token.token_type is not Token.VARIABLE:
             raise TypeError(f"Unexpected token {token.value}")
+
+        if not isinstance(token.value, str):
+            raise TypeError("Token value for variable must be string")
 
         name: str = token.value
         size: Optional[int] = self.parse_index()
@@ -178,8 +181,10 @@ class Parser:
         token: Token = self.current_token
 
         if token.token_type is Token.INDEX:
+            if not isinstance(token.value, str):
+                raise TypeError("Token value for variable must be string")
             return int(token.value[1 : len(token.value) - 1])
-        elif token.token_type is None:
+        if token.token_type is None:
             return None
 
         raise TypeError(f"Unexpected token {token.value}, {token.token_type}")
@@ -192,7 +197,7 @@ class Parser:
         token: Token = self.current_token
 
         if token.token_type is not Token.TYPE:
-            raise TypeError(f"Unexpected token {token.value}")
+            raise TypeError("Unexpected token {token.value}")
 
         # Not yet implemented, currently only allows int
         return None
@@ -206,6 +211,8 @@ class Parser:
 
         if token.token_type is not Token.LABEL:
             raise TypeError(f"Unexpected token {token.value}")
+        if not isinstance(token.value, str):
+            raise TypeError(f"Token value for label must be string")
 
         return Label(token.value)
 

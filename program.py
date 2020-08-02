@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 class Label:
     """
     Label represents a label for an instruction that
@@ -14,7 +17,7 @@ class Variable:
     or a variable stored in memory
     """
 
-    def __init__(self, name: str, index: int):
+    def __init__(self, name: str, index: Optional[int]):
         self.name = name
         self.index = index
 
@@ -28,30 +31,6 @@ class Jump:
         self.label = label
         self.var = var
         self.condition = condition
-
-
-class Operation:
-    """
-    Operation represents some operation on a variable
-    """
-
-    ASSIGNMENT = ["="]
-
-    """
-    If operator is None, then the operation is just a value (lhs)
-    """
-
-    # rhs is type Operation
-    def __init__(self, lhs: Variable, operator: str, rhs):
-
-        if operator != None:
-            # Allow for other operators to be implemented
-            if operator != Operation.ASSIGNMENT:
-                raise TypeError
-
-        self.lhs = var
-        self.operator = operator
-        self.rhs = rhs
 
 
 class Program:
@@ -85,7 +64,7 @@ class Program:
         """
         if var.name in self.variables:
             raise ValueError(f"Variable already exists {var.name}")
-        if var.index == None:
+        if var.index is None:
             self.variables[var.name] = 0
         else:
             self.variables[var.name] = [0] * var.index
@@ -105,8 +84,6 @@ class Program:
         """
         Get the value of a variable in classical memory
         """
-        if var.name == None:
-            return var.value
         if not var.name in self.variables:
             raise ValueError(f"Variable does not exist {var.name}")
         if var.index == None:
