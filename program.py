@@ -57,6 +57,7 @@ class Program:
         Add an instruction to the list of instructions
         """
         self.instructions.append(instruction)
+        self.program_counter += 1
 
     def define_variable(self, var: Variable) -> None:
         """

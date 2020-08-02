@@ -45,7 +45,6 @@ def main():
             parsed_object = Parser(tokens).parse()
 
             program.add_instruction(text)
-            program.program_counter += 1
             if len(parsed_object) > 0 and isinstance(parsed_object[0], Label):
                 program.set_label(parsed_object[0])
 
