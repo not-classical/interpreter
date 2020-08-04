@@ -1,0 +1,27 @@
+DECLARE ro BIT[2]
+
+H 0
+CNOT 0 1
+
+# Uncomment out lines based on which message you want to send #
+
+# 00 #
+#I 0
+
+# 01 #
+#X 0
+
+# 10 #
+#Z 0
+
+# 11 #
+X 0
+Z 0
+
+#		#		#		#
+
+CNOT 0 1
+H 0
+
+MEASURE 0 ro[0]
+MEASURE 1 ro[1]

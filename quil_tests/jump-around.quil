@@ -1,0 +1,10 @@
+X 0
+
+DECLARE cond BIT # We can store comparison results in bits
+
+LABEL @some_loop
+H 0
+MEASURE 0 cond
+JUMP-UNLESS @end cond
+
+LABEL @end

@@ -1,0 +1,18 @@
+DECLARE ro BIT[2]
+
+H 0
+CNOT 0 1
+
+CNOT 2 0
+H 2
+MEASURE 2 ro[0]
+MEASURE 0 ro[1]
+
+JUMP-UNLESS @SKIP ro[1]
+X 1
+LABEL @SKIP
+JUMP-UNLESS @END ro[0]
+Z 1
+LABEL @END
+
+# Expect middle qubit to be zero

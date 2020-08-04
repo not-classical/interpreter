@@ -1,7 +1,7 @@
 H 0
 CNOT 0 1
 
-# Message is 0 1
+# Message is  |00>
 I 0
 
 CNOT 0 1

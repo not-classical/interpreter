@@ -19,7 +19,7 @@ def main():
     To exit, use Ctrl-D
     """
     )
-    system = ProductSystem(2)
+    system = ProductSystem(1)
     program = Program()
 
     # Read all instructions and set labels
